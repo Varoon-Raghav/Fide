@@ -1,3 +1,9 @@
+
+# pip install requests
+
+
+#----------------------------------- The basics
+
 import requests
 from requests.auth import HTTPBasicAuth
 
@@ -19,6 +25,12 @@ def send_ethereum_request(method, params):
     response = requests.post(infura_url, headers=headers, json=data, auth=HTTPBasicAuth('', ''))
     return response.json()
 
+
+
+#----------------------------------- Account Balance
+
+
+
 # Example: Check Account Balance
 balance_params = [address, "latest"]
 balance_response = send_ethereum_request("eth_getBalance", balance_params)
@@ -26,3 +38,21 @@ balance_wei = int(balance_response["result"], 16)
 balance_eth = balance_wei / 1e18
 
 print(f"Balance of {address}: {balance_eth} ETH")
+
+
+
+
+#----------------------------------- # of Transactions
+
+
+
+
+# Get the number of transactions sent from the address
+transaction_count_params = [address, "latest"]
+transaction_count_response = send_ethereum_request("eth_getTransactionCount", transaction_count_params)
+
+if "result" in transaction_count_response:
+    total_transactions = int(transaction_count_response["result"], 16)
+    print(f"Total transactions for {address}: {total_transactions}")
+else:
+    print("Error retrieving transaction count.")
